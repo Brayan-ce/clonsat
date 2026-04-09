@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import styles from './crear.module.css';
 import { crearPedimento } from './servidor';
-import { ADUANAS, ANIOS } from '../../../../main/ingreso/servidor';
+import { ADUANAS, ANIOS } from '../../../../main/ingreso/constantes';
 
 const ESTADOS = ['DESADUANADO', 'EN PROCESO', 'EN REVISION', 'RECHAZADO'];
 

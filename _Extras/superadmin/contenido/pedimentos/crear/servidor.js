@@ -2,7 +2,7 @@
 
 import pool from '@/_DB/db';
 import { redirect } from 'next/navigation';
-import { ADUANAS } from '@/_Extras/main/ingreso/servidor';
+import { ADUANAS } from '@/_Extras/main/ingreso/constantes';
 
 export async function crearPedimento(formData) {
   const aduana       = formData.get('aduana')           || '';

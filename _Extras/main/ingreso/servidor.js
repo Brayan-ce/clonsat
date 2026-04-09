@@ -1,66 +1,8 @@
-'use server';
+﻿'use server';
 
 import { headers } from 'next/headers';
 import pool from '@/_DB/db';
-
-export const MODO_VALIDACION = true;
-
-export const ADUANAS = [
-  { value: '-10', label: '-' },
-  { value: '10',   label: 'ACAPULCO, GRO.' },
-  { value: '6660', label: 'ADUANA VIRTUAL PARA PREVALIDADORES' },
-  { value: '470',  label: 'AEROPUERTO INTERNAL. CD. DE MEXICO, D.F.' },
-  { value: '850',  label: 'AEROPUERTO INTERNAL. FELIPE ANGELES, MEX' },
-  { value: '20',   label: 'AGUA PRIETA, SON.' },
-  { value: '730',  label: 'AGUASCALIENTES, AGS.' },
-  { value: '810',  label: 'ALTAMIRA, TAMPS.' },
-  { value: '530',  label: 'CANCUN, Q. ROO.' },
-  { value: '440',  label: 'CD. ACUNA, COAH.' },
-  { value: '820',  label: 'CD. CAMARGO, TAMPS.' },
-  { value: '60',   label: 'CD. DEL CARMEN, CAMP.' },
-  { value: '370',  label: 'CD. HIDALGO, CHIS.' },
-  { value: '70',   label: 'CD. JUAREZ, CHIH.' },
-  { value: '340',  label: 'CD. MIGUEL ALEMAN, TAMPS.' },
-  { value: '300',  label: 'CD. REYNOSA, TAMPS.' },
-  { value: '670',  label: 'CHIHUAHUA, CHIH.' },
-  { value: '80',   label: 'COATZACOALCOS, VER.' },
-  { value: '800',  label: 'COLOMBIA, N.L.' },
-  { value: '830',  label: 'DOS BOCAS' },
-  { value: '110',  label: 'ENSENADA, B.C.' },
-  { value: '480',  label: 'GUADALAJARA, JAL.' },
-  { value: '840',  label: 'GUANAJUATO, GTO' },
-  { value: '120',  label: 'GUAYMAS, SON.' },
-  { value: '140',  label: 'LA PAZ, B.C.S.' },
-  { value: '510',  label: 'LAZARO CARDENAS, MICH.' },
-  { value: '160',  label: 'MANZANILLO, COL.' },
-  { value: '170',  label: 'MATAMOROS, TAMPS.' },
-  { value: '180',  label: 'MAZATLAN, SIN.' },
-  { value: '190',  label: 'MEXICALI, B.C.' },
-  { value: '200',  label: 'MEXICO' },
-  { value: '520',  label: 'MONTERREY, N.L.' },
-  { value: '220',  label: 'NACO, SON.' },
-  { value: '230',  label: 'NOGALES, SON.' },
-  { value: '240',  label: 'NUEVO LAREDO, TAMPS.' },
-  { value: '250',  label: 'OJINAGA, CHIH.' },
-  { value: '270',  label: 'PIEDRAS NEGRAS, COAH.' },
-  { value: '280',  label: 'PROGRESO, YUC.' },
-  { value: '750',  label: 'PUEBLA, PUE.' },
-  { value: '260',  label: 'PUERTO PALOMAS, CHIH.' },
-  { value: '640',  label: 'QUERETARO, QRO.' },
-  { value: '310',  label: 'SALINA CRUZ, OAX.' },
-  { value: '330',  label: 'SAN LUIS RIO COLORADO, SON.' },
-  { value: '500',  label: 'SONOYTA, SON.' },
-  { value: '50',   label: 'SUBTENIENTE LOPEZ, Q. ROO.' },
-  { value: '380',  label: 'TAMPICO, TAMPS.' },
-  { value: '390',  label: 'TECATE, B.C.' },
-  { value: '400',  label: 'TIJUANA, B.C.' },
-  { value: '650',  label: 'TOLUCA, MEX.' },
-  { value: '460',  label: 'TORREON, COAH.' },
-  { value: '420',  label: 'TUXPAN, VER.' },
-  { value: '430',  label: 'VERACRUZ, VER.' },
-];
-
-export const ANIOS = ['2026','2025','2024','2023','2022','2021','2020','2019','2018','2017'];
+import { ADUANAS } from './constantes';
 
 // ── BUSCAR PEDIMENTO ─────────────────────────────────────
 const base = `
