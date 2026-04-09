@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Sistema de Operación Integral Aduanera',
+  title: 'Consultas rápidas de SOIA',
   description: 'Consulta rápida por pedimento, VIN o contenedor específico',
 };
 

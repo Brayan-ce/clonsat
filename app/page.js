@@ -1,5 +1,5 @@
-import Ingreso from '../_Extras/main/ingreso/ingreso';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return <Ingreso />;
+  redirect('/SOIANET/oia_consultarap_cep.aspx');
 }
