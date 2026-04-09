@@ -1,0 +1,75 @@
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #285c4d;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.12);
+}
+
+.brand {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  padding: 22px 20px 18px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.link {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 11px 20px;
+  transition: background 0.15s;
+}
+
+.link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-weight: bold;
+  border-left: 3px solid #fff;
+  padding-left: 17px;
+}
+
+.btnSalir {
+  margin: 4px 16px 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  padding: 9px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnSalir:hover {
+  background: rgba(255, 255, 255, 0.24);
+}

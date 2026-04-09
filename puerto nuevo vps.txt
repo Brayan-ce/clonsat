@@ -1,0 +1,22 @@
+| App           | Puerto |
+| ------------- | ------ |
+| frontend POS  | 3000   |
+| backend POS   | 3001   |
+| web principal | 4000   |
+| pruebas       | 4001   |
+
+
+pm2 delete all
+
+cd /var/www/phone
+PORT=4001 pm2 start npm --name phone-app -- start
+
+cd /var/www/ambrysoft-front
+PORT=4000 pm2 start npm --name ambrysoft -- start
+
+cd /var/www/frontend-POS-ambrysoft
+npm run build
+pm2 start npm --name frontend-ambrysoft-pos -- start -- -p 3000
+
+cd /var/www/backend_POS_ambrysoft
+pm2 start npm --name backend-ambrysoft-pos -- start

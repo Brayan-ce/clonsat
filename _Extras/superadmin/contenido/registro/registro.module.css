@@ -1,0 +1,150 @@
+.page {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #333;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.titulo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #285c4d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.contador {
+  font-size: 13px;
+  color: #6c757d;
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 2px 10px;
+}
+
+.vacio {
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  background: #fff;
+  font-size: 12px;
+}
+
+.tabla thead tr {
+  background: #285c4d;
+  color: #fff;
+}
+
+.tabla thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.rowOk,
+.rowNo {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.rowOk td,
+.rowNo td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.rowOk:hover,
+.rowNo:hover {
+  background: #f8f9fa;
+}
+
+.rowNo {
+  background: #fffafa;
+}
+
+.tdId    { color: #adb5bd; width: 50px; }
+.tdIp    { font-family: monospace; font-size: 11px; white-space: nowrap; }
+.tdGeo   { white-space: nowrap; }
+.tdIsp   { color: #6c757d; font-size: 11px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdBusqueda { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tdRes   { white-space: nowrap; }
+.tdFecha { white-space: nowrap; font-size: 11px; color: #6c757d; }
+
+/* badges tipo */
+.badge {
+  display: inline-block;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.badgePed { background: #d4edda; color: #155724; }
+.badgeVin { background: #cce5ff; color: #004085; }
+.badgeCon { background: #fff3cd; color: #856404; }
+
+/* resultado */
+.found    { color: #28a745; font-weight: bold; }
+.notFound { color: #dc3545; }
+
+/* paginación */
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.rangoInfo { color: #6c757d; }
+
+.btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btnPag {
+  height: 32px;
+  padding: 0 14px;
+  background: #285c4d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  transition: background 0.2s;
+}
+
+.btnPag:hover:not(:disabled) { background: #1a3d26; }
+.btnPag:disabled { background: #9fbfb7; cursor: not-allowed; }
+
+.paginaActual {
+  font-weight: bold;
+  min-width: 60px;
+  text-align: center;
+}

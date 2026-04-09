@@ -1,0 +1,107 @@
+.page {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #333;
+}
+
+.cargando {
+  font-size: 16px;
+  color: #285c4d;
+  padding: 40px;
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.titulo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #285c4d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btnEditar {
+  height: 34px;
+  padding: 0 18px;
+  background: #285c4d;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btnEditar:hover {
+  background: #1a3d26;
+}
+
+.btnVolver {
+  font-size: 13px;
+  color: #285c4d;
+  text-decoration: underline;
+  font-family: Arial, sans-serif;
+}
+
+.tarjeta {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 24px 28px;
+  max-width: 860px;
+  margin-bottom: 20px;
+}
+
+.seccionTitulo {
+  font-size: 12px;
+  font-weight: bold;
+  color: #285c4d;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #285c4d;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+}
+
+.gridFull {
+  grid-column: 1 / -1;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.valor {
+  font-size: 13px;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
