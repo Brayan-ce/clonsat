@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import styles from './ingreso.module.css';
-import { ADUANAS, ANIOS, MODO_VALIDACION } from './servidor';
-import { buscarPedimento } from './acciones';
-import { registrarBusqueda } from './registrar';
+import { ADUANAS, ANIOS, MODO_VALIDACION, buscarPedimento, registrarBusqueda } from './servidor';
 
 export default function Ingreso() {
   const [tipoBusqueda, setTipoBusqueda] = useState('pedimento');

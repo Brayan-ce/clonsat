@@ -1,6 +1,6 @@
 'use server';
 
-import pool from '../../../../_DB/db.js';
+import pool from '@/_DB/db';
 
 export async function obtenerPedimentos() {
   const [rows] = await pool.query(

@@ -1,6 +1,6 @@
 'use server';
 
-import pool from '../../../_DB/db.js';
+import pool from '@/_DB/db';
 import { redirect } from 'next/navigation';
 
 export async function accionLogin(formData) {

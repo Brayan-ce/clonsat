@@ -1,6 +1,6 @@
 'use server';
 
-import pool from '../../../../_DB/db.js';
+import pool from '@/_DB/db';
 
 export async function obtenerResumen() {
   const [[{ totalPedimentos }]] = await pool.query('SELECT COUNT(*) AS totalPedimentos FROM pedimentos');

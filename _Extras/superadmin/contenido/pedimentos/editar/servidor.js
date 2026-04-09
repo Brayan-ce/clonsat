@@ -1,8 +1,8 @@
 'use server';
 
-import pool from '../../../../../_DB/db.js';
+import pool from '@/_DB/db';
 import { redirect } from 'next/navigation';
-import { ADUANAS } from '../../../../main/ingreso/servidor.js';
+import { ADUANAS } from '@/_Extras/main/ingreso/servidor';
 
 export async function obtenerPedimento(id) {
   const [[p]] = await pool.query(
