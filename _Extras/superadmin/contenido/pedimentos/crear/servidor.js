@@ -2,9 +2,10 @@
 
 import pool from '@/_DB/db';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { ADUANAS } from '@/_Extras/main/ingreso/constantes';
 
-export async function crearPedimento(formData) {
+export async function crearPedimento(prevState, formData) {
   const aduana       = formData.get('aduana')           || '';
   const anio         = formData.get('anio')             || '';
   const patente      = formData.get('patente')          || '';
@@ -46,5 +47,6 @@ export async function crearPedimento(formData) {
     return { error: 'Error al guardar el pedimento' };
   }
 
+  revalidatePath('/superadmin/pedimentos');
   redirect('/superadmin/pedimentos');
 }

@@ -1,8 +1,18 @@
 ﻿'use server';
 
-import { headers } from 'next/headers';
+import { headers, cookies } from 'next/headers';
 import pool from '@/_DB/db';
 import { ADUANAS } from './constantes';
+
+// ── TOTAL VISITAS ────────────────────────────────────────
+export async function obtenerTotalVisitas() {
+  try {
+    const [[{ total }]] = await pool.query('SELECT COUNT(*) AS total FROM registro_busquedas');
+    return total;
+  } catch {
+    return 0;
+  }
+}
 
 // ── BUSCAR PEDIMENTO ─────────────────────────────────────
 const base = `
@@ -68,6 +78,8 @@ export async function buscarPedimento({ tipo, aduana, anio, patente, documento, 
 export async function registrarBusqueda({ tipo, aduana, anio, patente, documento, vin, contenedor, encontrado, totalResultados }) {
   try {
     const hdrs      = await headers();
+    const cookieStore = await cookies();
+    const vid       = cookieStore.get('vid')?.value || null;
     const forwarded = hdrs.get('x-forwarded-for');
     const realIp    = hdrs.get('x-real-ip');
     const ip        = (forwarded ? forwarded.split(',')[0].trim() : realIp) || '127.0.0.1';
@@ -95,14 +107,14 @@ export async function registrarBusqueda({ tipo, aduana, anio, patente, documento
 
     await pool.query(
       `INSERT INTO registro_busquedas
-         (tipo, aduana, aduana_label, anio, patente, documento, vin, contenedor,
+         (visitor_id, tipo, aduana, aduana_label, anio, patente, documento, vin, contenedor,
           ip, user_agent, pais, pais_codigo, region, ciudad, latitud, longitud, isp,
           encontrado, total_resultados)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [tipo, aduana||null, aduanaLabel||null, anio||null, patente||null, documento||null,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [vid, tipo, aduana||null, aduanaLabel||null, anio||null, patente||null, documento||null,
        vin||null, contenedor||null, ip, userAgent,
        pais, paisCodigo, region, ciudad, latitud, longitud, isp,
        encontrado ? 1 : 0, totalResultados || 0]
     );
-  } catch { /* registro opcional */ }
+  } catch(err) { console.error('[registrarBusqueda]', err?.message ?? err); }
 }

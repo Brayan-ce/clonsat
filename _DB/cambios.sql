@@ -44,3 +44,11 @@ CREATE TABLE IF NOT EXISTS registro_busquedas (
   INDEX idx_pais    (pais_codigo),
   INDEX idx_ip      (ip)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── 2. VISITOR ID ─────────────────────────────────────
+--  Cookie UUID asignada al visitante en su primera visita.
+--  Permite agrupar búsquedas del mismo usuario anónimo.
+-- ─────────────────────────────────────────────────────
+ALTER TABLE registro_busquedas
+  ADD COLUMN visitor_id VARCHAR(36) NULL DEFAULT NULL AFTER id,
+  ADD INDEX idx_visitor (visitor_id);

@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .titulo {
@@ -26,6 +26,198 @@
   text-decoration: underline;
   font-family: Arial, sans-serif;
 }
+
+/* ── PASOS ── */
+.paso {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+.pasoHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.pasoNum {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #285c4d;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pasoTitulo {
+  font-size: 14px;
+  font-weight: bold;
+  color: #1a1a1a;
+  font-family: Arial, sans-serif;
+}
+
+.pasoSub {
+  font-size: 12px;
+  color: #6c757d;
+  font-family: Arial, sans-serif;
+  margin-top: 2px;
+}
+
+/* Tipo seleccionado (pill) */
+.tipoSeleccionado {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-family: Arial, sans-serif;
+}
+
+.tipoIcono {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.tipoLabel {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.hint {
+  font-weight: normal;
+  font-size: 10px;
+  color: #9aaca6;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.opcional {
+  font-size: 11px;
+  font-weight: normal;
+  opacity: 0.6;
+  text-transform: none;
+}
+
+.inputDestacado {
+  font-size: 15px !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.form {
+  padding: 4px 0 0 0;
+}
+
+.seccionTitulo {
+  font-size: 12px;
+  font-weight: bold;
+  color: #285c4d;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #285c4d;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+  margin-bottom: 24px;
+}
+
+.gridFull {
+  grid-column: 1 / -1;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #5c656d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.input,
+.select {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 0 8px;
+  color: #495057;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #285c4d;
+  box-shadow: 0 0 0 2px rgba(40, 92, 77, 0.15);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 4px 0 24px 0;
+}
+
+.botones {
+  margin-top: 8px;
+}
+
+.btnGuardar {
+  height: 38px;
+  padding: 0 28px;
+  background: #285c4d;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnGuardar:hover:not(:disabled) {
+  background: #1a3d26;
+}
+
+.btnGuardar:disabled {
+  background: #7aab9b;
+  cursor: not-allowed;
+}
+
+.error {
+  background: #fdecea;
+  border: 1px solid #e57373;
+  border-radius: 4px;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 9px 14px;
+  margin-bottom: 16px;
+}
+
 
 .form {
   background: #fff;

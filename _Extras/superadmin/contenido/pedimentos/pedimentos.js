@@ -1,25 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './pedimentos.module.css';
-import { obtenerPedimentos } from './servidor';
+import { eliminarPedimento } from './servidor';
 
-export default function Pedimentos() {
-  const [lista, setLista]       = useState([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    obtenerPedimentos().then((d) => {
-      setLista(d);
-      setCargando(false);
-    });
-  }, []);
-
-  if (cargando) return <div className={styles.cargando}>Cargando...</div>;
-
+export default function Pedimentos({ lista = [] }) {
   return (
     <div className={styles.page}>
+
       <div className={styles.encabezado}>
         <h1 className={styles.titulo}>Pedimentos</h1>
         <Link href="/superadmin/pedimentos/crear" className={styles.btnNuevo}>
@@ -57,6 +45,17 @@ export default function Pedimentos() {
                 <td className={styles.acciones}>
                   <Link href={`/superadmin/pedimentos/${p.id}/ver`}    className={styles.btnVer}>Ver</Link>
                   <Link href={`/superadmin/pedimentos/${p.id}/editar`} className={styles.btnEditar}>Editar</Link>
+                  <form
+                    action={eliminarPedimento.bind(null, p.id)}
+                    onSubmit={(e) => {
+                      if (!confirm(`¿Eliminar el pedimento #${p.id}? Esta acción no se puede deshacer.`)) e.preventDefault();
+                    }}
+                    style={{ display: 'inline' }}
+                  >
+                    <button type="submit" className={styles.btnEliminar}>
+                      <ion-icon name="trash-outline" />
+                    </button>
+                  </form>
                 </td>
               </tr>
             ))}

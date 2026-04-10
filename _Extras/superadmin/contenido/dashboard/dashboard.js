@@ -1,21 +1,8 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 import { obtenerResumen } from './servidor';
 
-export default function Dashboard() {
-  const [datos, setDatos]       = useState(null);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    obtenerResumen().then((d) => {
-      setDatos(d);
-      setCargando(false);
-    });
-  }, []);
-
-  if (cargando) return <div className={styles.cargando}>Cargando...</div>;
+export default async function Dashboard() {
+  const datos = await obtenerResumen();
 
   return (
     <div className={styles.page}>

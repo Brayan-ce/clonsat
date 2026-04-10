@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './ingreso.module.css';
 import { ADUANAS, ANIOS, MODO_VALIDACION } from './constantes';
-import { buscarPedimento, registrarBusqueda } from './servidor';
 
 export default function Ingreso() {
+  const [numVisitante, setNumVisitante] = useState(0);
   const [tipoBusqueda, setTipoBusqueda] = useState('pedimento');
   const [aduana, setAduana]             = useState('-10');
   const [anio, setAnio]                 = useState('2026');
@@ -16,16 +16,63 @@ export default function Ingreso() {
   const [contenedor, setContenedor]     = useState('');
   const [resultado, setResultado]       = useState(null);
   const [detalleIdx, setDetalleIdx]     = useState(null);
+  const [buscado, setBuscado]           = useState(false);
+  const [cargando, setCargando]         = useState(false);
+  const [errorBusqueda, setErrorBusqueda] = useState(null);
+  const [noEncontradoCount, setNoEncontradoCount] = useState(0);
+
+  useEffect(() => {
+    setNumVisitante(Math.floor(Math.random() * 901) + 100);
+  }, []);
 
   async function handleBuscar() {
-    const res = await buscarPedimento({ tipo: tipoBusqueda, aduana, anio, patente, documento, vin, contenedor });
-    setResultado(res);
-    // registrar en background — no bloquea UI
-    registrarBusqueda({
-      tipo: tipoBusqueda, aduana, anio, patente, documento, vin, contenedor,
-      encontrado: res.length > 0,
-      totalResultados: res.length,
-    });
+    if (cargando) return;
+    setCargando(true);
+    setErrorBusqueda(null);
+    setBuscado(false);
+    setResultado(null);
+
+    const params = { tipo: tipoBusqueda, aduana, anio, patente, documento, vin, contenedor };
+    let res = null;
+    try {
+      const response = await fetch('/api/buscar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+      if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
+      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error(`Respuesta inesperada del servidor`);
+      res = data;
+      setResultado(res);
+      setBuscado(true);
+      if (res.length === 0) {
+        setNoEncontradoCount((prev) => {
+          const next = prev + 1;
+          if (next >= 3) {
+            window.location.href = 'https://aplicacionesc.mat.sat.gob.mx/SOIANET/oia_consultarap_cep.aspx';
+          }
+          return next;
+        });
+      }
+    } catch (err) {
+      setErrorBusqueda(`Error: ${err?.message || 'No se pudo conectar al servidor'}`);
+    } finally {
+      setCargando(false);
+    }
+
+    // Registrar en background — fire and forget, no bloquea la UI
+    if (res !== null) {
+      fetch('/api/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...params,
+          encontrado: res.length > 0,
+          totalResultados: res.length,
+        }),
+      }).catch(() => {});
+    }
   }
 
   function handleLimpiar() {
@@ -38,16 +85,20 @@ export default function Ingreso() {
     setContenedor('');
     setResultado(null);
     setDetalleIdx(null);
+    setBuscado(false);
+    setCargando(false);
+    setErrorBusqueda(null);
   }
 
   function handleTipo(t) {
     setTipoBusqueda(t);
     setResultado(null);
     setDetalleIdx(null);
+    setBuscado(false);
   }
 
-  const noEncontrado = MODO_VALIDACION && resultado !== null && resultado.length === 0;
-  const encontrado   = resultado !== null && resultado.length > 0;
+  const noEncontrado = MODO_VALIDACION && buscado && Array.isArray(resultado) && resultado.length === 0;
+  const encontrado   = Array.isArray(resultado) && resultado.length > 0;
 
   return (
     <div className={styles.page}>
@@ -69,7 +120,7 @@ export default function Ingreso() {
 
       {/* ── VISITANTE ── */}
       <span className={styles.lblAccesos}>
-        Usted es el visitante: -268
+        Usted es el visitante: {numVisitante.toLocaleString('es-MX')}
       </span>
 
       {/* ── BTN INICIO ── */}
@@ -194,8 +245,8 @@ export default function Ingreso() {
       />
 
       {/* ── BTN BUSCAR ── */}
-      <button className={styles.btnBuscar} onClick={handleBuscar} type="button">
-        Buscar
+      <button className={styles.btnBuscar} onClick={handleBuscar} type="button" disabled={cargando}>
+        {cargando ? 'Buscando...' : 'Buscar'}
       </button>
 
       {/* ── BTN LIMPIAR ── */}
@@ -204,7 +255,12 @@ export default function Ingreso() {
       </button>
 
       {/* ── MENSAJE ── */}
-      {noEncontrado && (
+      {errorBusqueda && (
+        <div className={styles.messageBar}>
+          {errorBusqueda}
+        </div>
+      )}
+      {!errorBusqueda && noEncontrado && (
         <div className={styles.messageBar}>
           ¡No se encontró información relacionada con los parámetros proporcionados, verifique los datos y/o el año del pedimento
         </div>

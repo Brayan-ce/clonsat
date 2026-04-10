@@ -2,6 +2,7 @@
 
 import pool from '@/_DB/db';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { ADUANAS } from '@/_Extras/main/ingreso/constantes';
 
 export async function obtenerPedimento(id) {
@@ -16,7 +17,7 @@ export async function obtenerPedimento(id) {
   return p || null;
 }
 
-export async function actualizarPedimento(id, formData) {
+export async function actualizarPedimento(id, prevState, formData) {
   const aduana       = formData.get('aduana')           || '';
   const anio         = formData.get('anio')             || '';
   const patente      = formData.get('patente')          || '';
@@ -59,5 +60,7 @@ export async function actualizarPedimento(id, formData) {
     return { error: 'Error al actualizar el pedimento' };
   }
 
+  revalidatePath(`/superadmin/pedimentos/${id}/ver`);
+  revalidatePath('/superadmin/pedimentos');
   redirect(`/superadmin/pedimentos/${id}/ver`);
 }
