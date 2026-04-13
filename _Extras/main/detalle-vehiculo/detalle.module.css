@@ -1,0 +1,170 @@
+.wrapper {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+.wrapper table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.wrapper td {
+  padding: 0;
+}
+
+.loading {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #636363;
+  padding: 20px;
+}
+
+.tbPrincipal {
+  width: 99%;
+}
+
+.tituloModulo {
+  display: inline-block;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: medium;
+  font-weight: bold;
+  color: rgb(157, 36, 73);
+  margin-top: 0;
+}
+
+.titulo1 {
+  display: inline-block;
+  border-width: 1px;
+  border-style: none;
+  font-weight: normal;
+  height: 21px;
+  font-size: 14px;
+  color: #007836;
+  font-family: Verdana, sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.etiquetas3CRPE {
+  display: inline-block;
+  border-style: none;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #5c656d !important;
+  margin-left: 0;
+}
+
+.etiquetas3 {
+  display: inline-block;
+  color: #636363;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  border-color: transparent;
+  border-style: none;
+  border-width: 0;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.btnPrimario {
+  transition-duration: 0.4s;
+  background-color: #285c4d;
+  border-radius: 4px;
+  color: white;
+  font-family: Arial, sans-serif;
+  border: none;
+  font-weight: bold;
+  width: 145px;
+  height: 30px;
+  cursor: pointer;
+  border-color: inherit;
+  border-width: thin;
+  border-style: none;
+}
+
+.btnPrimario:hover {
+  background-color: #083c2d;
+  color: white;
+}
+
+.etiquetaLogin {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  margin-right: 3px;
+  margin-bottom: 0;
+}
+
+.grdVehiculos {
+  background-color: white;
+  border-color: #E7E7FF;
+  border-width: 1px;
+  border-style: none;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: smaller;
+  width: 99%;
+  border-collapse: collapse;
+}
+
+.gridHeader {
+  color: #F7F7F7;
+  background-color: #285C4D;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: bold;
+  height: 40px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.gridRow {
+  color: #333;
+  background-color: #F7F7F7;
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+  height: 25px;
+  white-space: nowrap;
+}
+
+.fraccion {
+  color: black;
+  background-color: #D7F4E2;
+  font-weight: bold;
+}
+
+.formaPago {
+  background-color: #EDEDED;
+}
+
+.style20  { width: 203px; }
+.style21  { height: 10px; width: 203px; }
+.style24  { width: 68px; }
+.style28  { height: 16px; width: 203px; }
+.style32  { width: 203px; height: 25px; }
+.style34  { width: 366px; }
+.style43  { width: 157px; height: 10px; }
+.style52  { width: 182px; }
+.style53  { height: 25px; width: 182px; }
+.style54  { width: 182px; height: 10px; }
+.style55  { height: 16px; width: 157px; }
+.style56  { height: 25px; width: 157px; }
+.style57  { width: 157px; }
+.style61  { width: 182px; height: 16px; }
+.style62  { height: 16px; width: 269px; }
+.style63  { width: 269px; height: 25px; }
+.style64  { height: 10px; width: 269px; }
+.style65  { width: 105px; }
+.style66  { width: 269px; }
+.style70  { width: 122px; }
+.style71  { height: 16px; width: 122px; }
+.style72  { height: 25px; width: 122px; }
+.style73  { width: 133px; }
+.style74  { height: 16px; width: 133px; }
+.style75  { height: 25px; width: 133px; }

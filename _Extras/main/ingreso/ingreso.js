@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import styles from './ingreso.module.css';
 import { ADUANAS, ANIOS, MODO_VALIDACION } from './constantes';
+
+const SESSION_KEY = 'ingreso_estado';
 
 export default function Ingreso() {
   const [numVisitante, setNumVisitante] = useState(0);
@@ -20,10 +23,43 @@ export default function Ingreso() {
   const [cargando, setCargando]         = useState(false);
   const [errorBusqueda, setErrorBusqueda] = useState(null);
   const [noEncontradoCount, setNoEncontradoCount] = useState(0);
+  const [showComplementos, setShowComplementos] = useState(false);
+  const [restored, setRestored]         = useState(false);
 
+  // Restaurar estado al montar (cuando el usuario regresa del detalle)
   useEffect(() => {
     setNumVisitante(Math.floor(Math.random() * 901) + 100);
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const s = JSON.parse(saved);
+        if (s.tipoBusqueda) setTipoBusqueda(s.tipoBusqueda);
+        if (s.aduana)        setAduana(s.aduana);
+        if (s.anio)          setAnio(s.anio);
+        if (s.patente)       setPatente(s.patente);
+        if (s.documento)     setDocumento(s.documento);
+        if (s.vin)           setVin(s.vin);
+        if (s.contenedor)    setContenedor(s.contenedor);
+        if (s.resultado)     setResultado(s.resultado);
+        if (s.buscado)       setBuscado(s.buscado);
+        if (s.detalleIdx !== undefined && s.detalleIdx !== null) setDetalleIdx(s.detalleIdx);
+        if (s.showComplementos) setShowComplementos(s.showComplementos);
+      }
+    } catch { /* sessionStorage no disponible */ }
+    setRestored(true);
   }, []);
+
+  // Guardar estado en sessionStorage cada vez que cambia (solo tras restaurar)
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        tipoBusqueda, aduana, anio, patente, documento, vin, contenedor,
+        resultado, buscado, detalleIdx, showComplementos,
+      }));
+    } catch { /* sessionStorage no disponible */ }
+  }, [restored, tipoBusqueda, aduana, anio, patente, documento, vin, contenedor,
+      resultado, buscado, detalleIdx, showComplementos]);
 
   async function handleBuscar() {
     if (cargando) return;
@@ -31,6 +67,7 @@ export default function Ingreso() {
     setErrorBusqueda(null);
     setBuscado(false);
     setResultado(null);
+    setShowComplementos(false);
 
     const params = { tipo: tipoBusqueda, aduana, anio, patente, documento, vin, contenedor };
     let res = null;
@@ -46,6 +83,14 @@ export default function Ingreso() {
       res = data;
       setResultado(res);
       setBuscado(true);
+      // Autocompletar campos cuando se busca por VIN y hay resultado
+      if (tipoBusqueda === 'vin' && res.length > 0) {
+        const p = res[0];
+        setAduana(p.aduana   || '-10');
+        setAnio(p.anio       || '2026');
+        setPatente(p.patente || '');
+        setDocumento(p.documento || '');
+      }
       if (res.length === 0) {
         setNoEncontradoCount((prev) => {
           const next = prev + 1;
@@ -88,6 +133,8 @@ export default function Ingreso() {
     setBuscado(false);
     setCargando(false);
     setErrorBusqueda(null);
+    setShowComplementos(false);
+    try { sessionStorage.removeItem(SESSION_KEY); } catch { /* no disponible */ }
   }
 
   function handleTipo(t) {
@@ -104,14 +151,7 @@ export default function Ingreso() {
     <div className={styles.page}>
 
       {/* ── IMAGEN ENCABEZADO ── */}
-      <Image
-        src="/logo.png"
-        alt="HACIENDA SAT - Sistema de Operación Integral Aduanera"
-        width={1020}
-        height={148}
-        className={styles.headerImg}
-        priority
-      />
+      <div className={styles.headerDiv} />
 
       {/* ── TÍTULO SECCIÓN ── */}
       <span className={styles.lblTitulo}>
@@ -270,6 +310,39 @@ export default function Ingreso() {
       {encontrado && (
         <div className={styles.resultsWrapper}>
 
+          {/* ── SECCIÓN COMPLEMENTOS (solo VIN, al dar clic en gif) ── */}
+          {tipoBusqueda === 'vin' && showComplementos && (() => {
+            const complementos = resultado.flatMap(p => p.complementos || []);
+            if (complementos.length === 0) return null;
+            return (
+              <>
+                <span className={styles.tituloTabla}> COMPLEMENTOS</span>
+                <table className={styles.grdComplementos}>
+                  <thead>
+                    <tr className={styles.grdHeader}>
+                      <td>ID DE CASO</td>
+                      <td>COMPLEMENTO 1</td>
+                      <td>COMPLEMENTO 2</td>
+                      <td>COMPLEMENTO 3</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {complementos.map((c, i) => (
+                      <tr key={i} className={styles.grdRow}>
+                        <td align="center">{c.idCaso}</td>
+                        <td align="center">{c.complemento1 || '\u00a0'}</td>
+                        <td align="center">{c.complemento2 || '\u00a0'}</td>
+                        <td align="center">{c.complemento3 || '\u00a0'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            );
+          })()}
+
+          {tipoBusqueda === 'vin' && showComplementos && <div className={styles.tablaSeparador} />}
+
           {/* Título y contador */}
           <span className={styles.tituloTabla}>CONSULTA DE SITUACIÓN DE PEDIMENTOS</span>
           <span className={styles.totalRegistros}>&nbsp;Total de registros: {resultado.length}</span>
@@ -350,6 +423,63 @@ export default function Ingreso() {
                   </tbody>
                 </table>
               </>
+            );
+          })()}
+
+          {/* ── TABLA IMPORTACIÓN DE VEHÍCULOS (solo búsqueda por VIN) ── */}
+          {tipoBusqueda === 'vin' && (() => {
+            const vehiculos = resultado.filter(p => p.vehiculo);
+            return (
+              <div className={styles.vehiculosSection}>
+                <span className={styles.tituloTabla}> CONSULTA DE IMPORTACIÓN DE VEHÍCULOS</span>
+                <span className={styles.totalRegistros}>Total de registros: {vehiculos.length}</span>
+                <table className={styles.grdPedimentos}>
+                  <thead>
+                    <tr className={styles.grdHeader}>
+                      <td style={{width:'70px',whiteSpace:'nowrap'}}>VER DETALLE</td>
+                      <td style={{width:'70px'}}>CLAVE DE DOCUMENTO</td>
+                      <td style={{width:'65px'}}>DOCUMENTO</td>
+                      <td style={{width:'65px'}}>PATENTE</td>
+                      <td>RFC</td>
+                      <td>CURP</td>
+                      <td>IMPORTADOR</td>
+                      <td>FECHA DE PAGO</td>
+                      <td>COMPLEMENTOS</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vehiculos.map((p, i) => {
+                      const v = p.vehiculo;
+                      const verUrl = `https://aplicacionesc.mat.sat.gob.mx/SOIANET/oia_consultadter_civ.aspx?Patente=${p.patente}&NumDcto=${p.documento}&Anio=${p.anio}&DocClave=${v.claveDocumento}&VIN=${p.vin}&Aduana=${p.aduana}`;
+                      return (
+                        <tr key={i} className={styles.grdRow}>
+                          <td className={styles.gridLink} align="center">
+                            <Link href={`/SOIANET/oia_consultadter_civ.aspx?Patente=${p.patente}&NumDcto=${p.documento}&Anio=${p.anio}&DocClave=${v.claveDocumento}&VIN=${p.vin}&Aduana=${p.aduana}`}>
+                              <Image src="/ver_detalle.gif" alt="Ver detalle" width={15} height={15} unoptimized />
+                            </Link>
+                          </td>
+                          <td align="center">{v.claveDocumento || '\u00a0'}</td>
+                          <td align="center">{p.documento}</td>
+                          <td align="center">{p.patente}</td>
+                          <td align="left">{v.rfc || '\u00a0'}</td>
+                          <td align="center">{v.curp || '\u00a0'}</td>
+                          <td align="left">{v.importador || '\u00a0'}</td>
+                          <td align="center">{v.fechaPago || '\u00a0'}</td>
+                          <td className={styles.gridLink} align="center">
+                            <button
+                              type="button"
+                              onClick={() => setShowComplementos(prev => !prev)}
+                              style={{background:'none',border:'none',cursor:'pointer',padding:0,lineHeight:0}}
+                            >
+                              <Image src="/complementos.gif" alt="Complementos" width={15} height={15} unoptimized />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             );
           })()}
 

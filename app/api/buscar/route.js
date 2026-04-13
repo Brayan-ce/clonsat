@@ -8,9 +8,15 @@ const base = `
          d.importe,
          d.fecha_hora_pago,
          d.linea_captura,
-         d.estado_linea_captura
+         d.estado_linea_captura,
+         v.clave_documento  AS veh_clave_doc,
+         v.rfc              AS veh_rfc,
+         v.curp             AS veh_curp,
+         v.importador       AS veh_importador,
+         v.fecha_pago       AS veh_fecha_pago
   FROM pedimentos p
-  LEFT JOIN pedimentos_detalle d ON d.id_pedimento = p.id
+  LEFT JOIN pedimentos_detalle  d ON d.id_pedimento = p.id
+  LEFT JOIN pedimentos_vehiculo v ON v.id_pedimento = p.id
 `;
 
 function mapRow(r) {
@@ -36,6 +42,13 @@ function mapRow(r) {
       lineaCaptura:       r.linea_captura        || '',
       estadoLineaCaptura: r.estado_linea_captura || '',
     },
+    vehiculo: r.veh_clave_doc ? {
+      claveDocumento: r.veh_clave_doc,
+      rfc:            r.veh_rfc            || '',
+      curp:           r.veh_curp           || '',
+      importador:     r.veh_importador     || '',
+      fechaPago:      r.veh_fecha_pago     || '',
+    } : null,
   };
 }
 
@@ -59,6 +72,25 @@ export async function POST(request) {
         base + `WHERE (? = '-10' OR p.aduana = ?) AND p.anio = ? AND UPPER(p.contenedor) = UPPER(?)`,
         [aduana, aduana, anio, (contenedor || '').trim()]
       );
+    }
+
+    if (tipo === 'vin' && rows.length > 0) {
+      const ids = rows.map(r => r.id);
+      const [compRows] = await pool.query(
+        'SELECT id_pedimento, id_caso, complemento1, complemento2, complemento3 FROM pedimentos_complemento WHERE id_pedimento IN (?)',
+        [ids]
+      );
+      const compMap = {};
+      for (const c of compRows) {
+        if (!compMap[c.id_pedimento]) compMap[c.id_pedimento] = [];
+        compMap[c.id_pedimento].push({
+          idCaso:       c.id_caso,
+          complemento1: c.complemento1 || '',
+          complemento2: c.complemento2 || '',
+          complemento3: c.complemento3 || '',
+        });
+      }
+      return NextResponse.json(rows.map(r => ({ ...mapRow(r), complementos: compMap[r.id] || [] })));
     }
 
     return NextResponse.json(rows.map(mapRow));

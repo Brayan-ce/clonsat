@@ -13,13 +13,15 @@
 }
 
 /* ── IMAGEN ENCABEZADO ── */
-.headerImg {
+.headerDiv {
   position: absolute;
   top: -3px;
   left: -1px;
-  width: 1020px !important;
-  height: 148px !important;
-  display: block;
+  width: 1020px;
+  height: 148px;
+  background-image: url('/logo.png');
+  background-size: 1020px 148px;
+  background-repeat: no-repeat;
   z-index: 101;
 }
 
@@ -586,4 +588,116 @@
 
 .detalleBtn:hover {
   color: #285C4D;
+}
+
+/* ── SEPARADOR ENTRE TABLAS (34 px, igual al original) ── */
+.tablaSeparador {
+  height: 34px;
+}
+
+/* ── SECCIÓN VEHÍCULOS ── */
+.vehiculosSection {
+  margin-top: 34px;
+}
+
+.vehiculosSection a img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* ── TABLA COMPLEMENTOS ── */
+.grdComplementos {
+  background-color: #fff;
+  border-collapse: collapse;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ══ DETALLE DE IMPORTACIÓN DE VEHÍCULO ══ */
+.btnRegresar {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #aaa;
+}
+
+.detalleTitulo {
+  display: block;
+  color: #C00;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 10.5pt;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.detalleSeccion {
+  display: block;
+  color: #285C4D;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: bold;
+  margin: 10px 0 3px;
+}
+
+.detalleTablaInfo {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+}
+
+.detalleTablaInfo td {
+  padding: 3px 6px;
+  vertical-align: middle;
+}
+
+.detalleLbl {
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+  width: 150px;
+}
+
+.detalleVal {
+  color: #000;
+}
+
+.detalleIvaHeader {
+  display: block;
+  color: #285C4D;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+  margin: 10px 0 2px;
+  letter-spacing: 0.01em;
+}
+
+.grdVehiculos {
+  background-color: #fff;
+  border-collapse: collapse;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 8pt;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.grdVehRow td {
+  white-space: nowrap;
+  padding: 2px 4px;
+  border: 1px solid #e7e7ff;
+}
+
+.grdVehFraccion {
+  background-color: #D7F4E2;
+  font-weight: bold;
+  color: #000;
+}
+
+.grdVehFp {
+  background-color: #EDEDED;
 }

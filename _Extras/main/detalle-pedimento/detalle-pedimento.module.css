@@ -1,0 +1,124 @@
+/* ═══════════════════════════════════════════════════
+   detalle-pedimento.module.css
+   Detalle de situación del pedimento
+   — mismo estilo base que detalle-vehiculo —
+═══════════════════════════════════════════════════ */
+
+.wrapper {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+.wrapper table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.wrapper td {
+  padding: 0;
+}
+
+.loading {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #636363;
+  padding: 20px;
+}
+
+.tbPrincipal {
+  width: 99%;
+}
+
+/* ── Título de módulo (debajo del header) ── */
+.tituloModulo {
+  display: inline-block;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: medium;
+  font-weight: bold;
+  color: rgb(157, 36, 73);
+  margin-top: 0;
+}
+
+/* ── Título de sección (verde, estilo .titulo1) ── */
+.titulo1 {
+  display: inline-block;
+  border-width: 1px;
+  border-style: none;
+  font-weight: normal;
+  height: 21px;
+  font-size: 14px;
+  color: #007836;
+  font-family: Verdana, sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+/* ── Total de registros (junto al título) ── */
+.totalRegistros {
+  display: inline-block;
+  color: #636363;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+/* ── Etiquetas de campo (negrita, gris-azulado) ── */
+.etiquetas3CRPE {
+  display: inline-block;
+  border-style: none;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #5c656d;
+  margin-left: 0;
+}
+
+/* ── Valores de campo ── */
+.etiquetas3 {
+  display: inline-block;
+  color: #636363;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  border-color: transparent;
+  border-style: none;
+  border-width: 0;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+/* ── Tabla de movimientos ── */
+.grdMovimientos {
+  background-color: white;
+  border-color: #339933;
+  border-width: 1px;
+  border-style: none;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: smaller;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* ── Encabezado de la tabla ── */
+.gridHeader {
+  color: #F7F7F7;
+  background-color: #285C4D;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: bold;
+  height: 45px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ── Celda SITUACION (fondo verde claro, subrayado) ── */
+.gridLink {
+  font-size: 9pt;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 3px;
+  color: white;
+  background-color: #d7f4e2;
+  text-decoration: underline;
+}

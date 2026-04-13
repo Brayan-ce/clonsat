@@ -1,9 +1,8 @@
-'use server';
+﻿'use server';
 
 import pool from '@/_DB/db';
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { ADUANAS } from '@/_Extras/main/ingreso/constantes';
+import { redirect } from 'next/navigation';
 
 export async function obtenerPedimento(id) {
   const [[p]] = await pool.query(
@@ -18,49 +17,99 @@ export async function obtenerPedimento(id) {
 }
 
 export async function actualizarPedimento(id, prevState, formData) {
-  const aduana       = formData.get('aduana')           || '';
-  const anio         = formData.get('anio')             || '';
-  const patente      = formData.get('patente')          || '';
-  const documento    = formData.get('documento')        || '';
-  const estado       = formData.get('estado')           || '';
-  const fecha        = formData.get('fecha')            || '';
-  const banco        = formData.get('banco')            || '';
-  const secuencia    = formData.get('secuencia')        || '0';
-  const numOperacion = formData.get('numero_operacion') || '';
-  const factura      = formData.get('factura')          || '';
-  const vin          = formData.get('vin')              || null;
-  const contenedor   = formData.get('contenedor')       || null;
+  const get = (k) => (formData.get(k) || '').toString().trim();
 
-  const aduanaObj   = ADUANAS.find((a) => a.value === aduana);
-  const aduanaLabel = aduanaObj ? aduanaObj.label : '';
+  // Campos generales
+  const aduana          = get('aduana');
+  const aduana_label    = get('aduana_label');
+  const anio            = get('anio');
+  const patente         = get('patente');
+  const documento       = get('documento');
+  const factura         = get('factura');
+  const secuencia       = get('secuencia');
+  const estado          = get('estado');
+  const fecha           = get('fecha');
+  const tipo_operacion  = get('tipo_operacion');
+  const clave_documento = get('clave_documento');
 
-  const detBanco     = formData.get('det_banco')            || '';
-  const detNumOp     = formData.get('det_numero_operacion') || '';
-  const detImporte   = formData.get('det_importe')          || '';
-  const detFechaHora = formData.get('det_fecha_hora_pago')  || '';
-  const detLinea     = formData.get('det_linea_captura')    || '';
-  const detEstado    = formData.get('det_estado_linea')     || '';
+  // Campos específicos por tipo
+  const vin       = get('vin');
+  const contenedor = get('contenedor');
 
-  try {
-    await pool.query(
-      `UPDATE pedimentos
-       SET aduana=?, aduana_label=?, anio=?, patente=?, documento=?, estado=?, fecha=?,
-           banco=?, secuencia=?, numero_operacion=?, factura=?, vin=?, contenedor=?
-       WHERE id=?`,
-      [aduana, aduanaLabel, anio, patente, documento, estado, fecha, banco, secuencia,
-       numOperacion, factura, vin || null, contenedor || null, id]
-    );
-    await pool.query(
-      `UPDATE pedimentos_detalle
-       SET banco=?, numero_operacion=?, importe=?, fecha_hora_pago=?, linea_captura=?, estado_linea_captura=?
-       WHERE id_pedimento=?`,
-      [detBanco, detNumOp, detImporte, detFechaHora, detLinea, detEstado, id]
-    );
-  } catch {
-    return { error: 'Error al actualizar el pedimento' };
+  // Pago
+  const banco         = get('banco');
+  const num_op        = get('numero_operacion');
+  const importe       = get('importe');
+  const fecha_hora    = get('fecha_hora_pago');
+  const linea_captura = get('linea_captura');
+  const estado_linea  = get('estado_linea_captura');
+
+  // Determinar tipo
+  const tipo = get('tipo'); // 'pedimento' | 'vin' | 'contenedor'
+
+  // Validaciones básicas
+  if (tipo === 'pedimento' && (!patente || !documento || !aduana)) {
+    return { error: 'Los campos Patente, Documento y Aduana son obligatorios.' };
+  }
+  if (tipo === 'vin') {
+    if (!vin) return { error: 'El campo VIN es obligatorio.' };
+    if (vin.length !== 17) return { error: 'El VIN debe tener exactamente 17 caracteres.' };
+  }
+  if (tipo === 'contenedor' && !contenedor) {
+    return { error: 'El campo Contenedor es obligatorio.' };
   }
 
-  revalidatePath(`/superadmin/pedimentos/${id}/ver`);
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    await conn.query(
+      `UPDATE pedimentos SET
+         aduana = ?, aduana_label = ?, anio = ?, patente = ?, documento = ?,
+         factura = ?, secuencia = ?, estado = ?, fecha = ?,
+         tipo_operacion = ?, clave_documento = ?,
+         vin = ?, contenedor = ?
+       WHERE id = ?`,
+      [
+        aduana, aduana_label, anio || null, patente, documento,
+        factura, secuencia, estado, fecha || null,
+        tipo_operacion, clave_documento,
+        vin || null, contenedor || null,
+        id,
+      ]
+    );
+
+    // Verificar si existe detalle
+    const [[det]] = await conn.query(
+      'SELECT id FROM pedimentos_detalle WHERE id_pedimento = ?', [id]
+    );
+
+    if (det) {
+      await conn.query(
+        `UPDATE pedimentos_detalle SET
+           banco = ?, numero_operacion = ?, importe = ?,
+           fecha_hora_pago = ?, linea_captura = ?, estado_linea_captura = ?
+         WHERE id_pedimento = ?`,
+        [banco, num_op, importe || null, fecha_hora || null, linea_captura, estado_linea, id]
+      );
+    } else {
+      await conn.query(
+        `INSERT INTO pedimentos_detalle
+           (id_pedimento, banco, numero_operacion, importe, fecha_hora_pago, linea_captura, estado_linea_captura)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, banco, num_op, importe || null, fecha_hora || null, linea_captura, estado_linea]
+      );
+    }
+
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    console.error('Error al actualizar pedimento:', err);
+    return { error: 'Ocurrió un error al guardar. Intente de nuevo.' };
+  } finally {
+    conn.release();
+  }
+
   revalidatePath('/superadmin/pedimentos');
   redirect(`/superadmin/pedimentos/${id}/ver`);
 }

@@ -1,0 +1,40 @@
+INSTRUCCIONES PARA ENTREGAR LOS 3 ARCHIVOS COMPLETOS:
+nextjs16
+que tenga seo bb no te olvides jeje
+1. ARCHIVO CLIENTE (nombre-seccion.js):
+   - Usar "use client" al inicio
+   - Usar ion-icon para todos los iconos
+   - Importar las funciones del servidor directamente: import { funcionServer } from './servidor'
+   - Llamar las funciones del servidor con await dentro de funciones async
+   - NO usar fetch ni APIs
+   - NO crear componentes separados, todo en un solo archivo
+   - NO usar emojis en comentarios ni console.log
+
+2. ARCHIVO CSS (nombre-seccion.module.css):
+   - NO usar :root
+   - NO usar selectores nativos de HTML (*, body, html, etc)
+   - Usar solo clases locales del module
+   - Para temas usar clases como .dark y .light aplicadas directamente
+   - Todo debe ser module scoped
+
+3. ARCHIVO SERVIDOR (servidor.js):
+   - Inicio obligatorio: "use server"
+   - Import obligatorio: import db from "@/_DB/db"
+   - NO usar datos emulados o hardcodeados
+   - TODO debe consultar la base de datos PostgreSQL usando las tablas del schema
+   - Usar cookies() de next/headers para manejar sesiones
+   - Retornar datos reales de la BD
+   - NO usar emojis en comentarios ni console.log
+
+4. ARQUITECTURA:
+   - Cliente llama directamente a funciones del servidor
+   - Servidor consulta PostgreSQL y retorna datos
+   - NO usar API routes (/api/...)
+   - NO usar componentes externos
+   - Server Side Components + Server Actions
+
+5. ENTREGA:
+   - Los 3 archivos completos
+   - Listos para copiar y pegar
+   - Sin código incompleto o resumido
+   - Sin emojis en el código
