@@ -86,11 +86,16 @@ CREATE TABLE IF NOT EXISTS pedimentos_complemento (
   CONSTRAINT fk_comp_pedimento FOREIGN KEY (id_pedimento) REFERENCES pedimentos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Datos de ejemplo para pedimento 5 (VIN 1C4GJWAG1JL931083)
-INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3) VALUES
-  (5, 'ED', '01712604GJ2D1', NULL, NULL),
-  (5, 'VU', '1',             NULL, NULL),
-  (5, 'ED', '01922617AN0Z6', NULL, NULL),
-  (5, 'ED', '01682601VO7W5', NULL, NULL),
-  (5, 'ED', '01712604GJ2E2', NULL, NULL),
-  (5, 'ED', '0436260NN82R7', NULL, NULL);
+-- Datos de ejemplo — busca el pedimento con VIN 1C4GJWAG1JL931083 dinámicamente
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'ED', '01712604GJ2D1', NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'VU', '1',             NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'ED', '01922617AN0Z6', NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'ED', '01682601VO7W5', NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'ED', '01712604GJ2E2', NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;
+INSERT INTO pedimentos_complemento (id_pedimento, id_caso, complemento1, complemento2, complemento3)
+SELECT p.id, 'ED', '0436260NN82R7', NULL, NULL FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;

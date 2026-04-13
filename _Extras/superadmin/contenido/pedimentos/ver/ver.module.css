@@ -519,6 +519,24 @@
 }
 .btnQrCopiar:hover { background: #eaf7f2; }
 
+.btnQrDescargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 44px;
+  padding: 0 18px;
+  background: #285c4d;
+  border: 2px solid #285c4d;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btnQrDescargar:hover { background: #1a3d2e; }
+
 .qrUrl {
   font-size: 12px;
   color: #aaa;

@@ -415,6 +415,27 @@
 }
 .qrPanelBtnCopiar:hover { background: #f5f0ff; }
 
+.qrPanelBtnDescargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  background: #6d28d9;
+  color: #fff;
+  border: 2px solid #7c3aed;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.15s;
+  width: 100%;
+  justify-content: center;
+}
+.qrPanelBtnDescargar:hover { background: #5b21b6; }
+
 .qrPanelVacio {
   display: flex;
   flex-direction: column;

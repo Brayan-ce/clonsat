@@ -16,7 +16,7 @@ ALTER TABLE pedimentos_vehiculo
   ADD COLUMN pais               VARCHAR(150)  NULL AFTER entidad_federativa,
   ADD COLUMN aduana_completa    VARCHAR(200)  NULL AFTER pais;
 
--- Actualizar pedimento 5 con datos del importador real
+-- Actualizar pedimento con VIN 1C4GJWAG1JL931083 con datos del importador real
 UPDATE pedimentos_vehiculo
 SET
   calle              = 'CENTRO COMERCIAL Col. OTAY CONSTITUYENTES',
@@ -27,7 +27,7 @@ SET
   entidad_federativa = 'BAJA CALIFORNIA',
   pais               = 'MEXICO (ESTADOS UNIDOS MEXICANOS)',
   aduana_completa    = 'TIJUANA, TIJUANA, BAJA CALIFORNIA.'
-WHERE id_pedimento = 5;
+WHERE id_pedimento = (SELECT id FROM pedimentos WHERE vin = '1C4GJWAG1JL931083' LIMIT 1);
 
 -- ── 2. Tabla de fracciones arancelarias del vehículo ──
 CREATE TABLE IF NOT EXISTS pedimentos_vehiculo_fraccion (
@@ -53,14 +53,15 @@ CREATE TABLE IF NOT EXISTS pedimentos_vehiculo_fraccion (
   CONSTRAINT fk_fraccion_pedimento FOREIGN KEY (id_pedimento) REFERENCES pedimentos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Fracción del vehículo para pedimento 5 (Jeep Wrangler 2018)
+-- Fracción del vehículo para pedimento con VIN 1C4GJWAG1JL931083 (Jeep Wrangler 2018)
 INSERT INTO pedimentos_vehiculo_fraccion
   (id_pedimento, fraccion, secuencia, marca, modelo, anio_vehiculo, numero_serie,
    kilometraje, valor_aduana,
    fp_iva, importe_iva, fp_advalorem, importe_advalorem,
    fp_isan, importe_isan, fp_tenencia, importe_tenencia)
-VALUES
-  (5, '87032402', 1, 'JEEP', 'WRANGLER', '2018', '1C4GJWAG1JL931083',
-   '5,000', '112029',
-   'EFECTIVO', 19860.00, 'EFECTIVO', 11203.00,
-   'NO DECLARADO', 0.00, 'NO DECLARADO', 0.00);
+SELECT
+  p.id, '87032402', 1, 'JEEP', 'WRANGLER', '2018', '1C4GJWAG1JL931083',
+  '5,000', '112029',
+  'EFECTIVO', 19860.00, 'EFECTIVO', 11203.00,
+  'NO DECLARADO', 0.00, 'NO DECLARADO', 0.00
+FROM pedimentos p WHERE p.vin = '1C4GJWAG1JL931083' LIMIT 1;

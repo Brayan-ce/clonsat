@@ -6,6 +6,32 @@ import { QRCodeSVG } from 'qrcode.react';
 import styles from './ver.module.css';
 import { eliminarPedimento, agregarMovimiento, eliminarMovimiento } from './servidor';
 
+/* ── Descarga del QR como PNG ── */
+function descargarQR(containerId, nombre) {
+  const svgEl = document.getElementById(containerId)?.querySelector('svg');
+  if (!svgEl) return;
+  const svgData = new XMLSerializer().serializeToString(svgEl);
+  const size = 480;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  img.onload = () => {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(img, 0, 0, size, size);
+    URL.revokeObjectURL(url);
+    const a = document.createElement('a');
+    a.download = `${nombre}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+  img.src = url;
+}
+
 /* ── Configuración de estados ── */
 const ESTADOS = {
   'DESADUANADO': { bg: '#eaf7f2', border: '#285c4d', color: '#1a3d2e', icono: 'checkmark-circle' },
@@ -295,7 +321,7 @@ export default function Ver({ id, pedimento: p }) {
           <div>
             <h2 className={styles.seccionTitulo}><ion-icon name="qr-code-outline" />Código QR — Situación del Pedimento</h2>
             <div className={styles.qrWrap}>
-              <div className={styles.qrCodigo}>
+              <div id="qr-ver-codigo" className={styles.qrCodigo}>
                 <QRCodeSVG value={qrUrl} size={240} level="M" includeMargin />
               </div>
               <div className={styles.qrInfo}>
@@ -314,6 +340,12 @@ export default function Ver({ id, pedimento: p }) {
                     }}
                   >
                     <ion-icon name="copy-outline" /> Copiar enlace
+                  </button>
+                  <button
+                    className={styles.btnQrDescargar}
+                    onClick={() => descargarQR('qr-ver-codigo', `pedimento-qr-${p.patente}-${p.documento}`)}
+                  >
+                    <ion-icon name="download-outline" /> Descargar QR
                   </button>
                 </div>
                 <div className={styles.qrUrl}>{qrUrl}</div>

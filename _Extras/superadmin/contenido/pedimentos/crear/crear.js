@@ -9,6 +9,32 @@ import { ADUANAS, ANIOS } from '@/_Extras/main/ingreso/constantes';
 
 const ESTADOS = ['EN PROCESO', 'DESADUANADO', 'EN REVISION', 'RECHAZADO'];
 
+/* ── Descarga del QR como PNG ── */
+function descargarQR(containerId, nombre) {
+  const svgEl = document.getElementById(containerId)?.querySelector('svg');
+  if (!svgEl) return;
+  const svgData = new XMLSerializer().serializeToString(svgEl);
+  const size = 480;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  img.onload = () => {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(img, 0, 0, size, size);
+    URL.revokeObjectURL(url);
+    const a = document.createElement('a');
+    a.download = `${nombre}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+  img.src = url;
+}
+
 /* ── Tipos de pedimento disponibles ── */
 const TIPOS = [
   {
@@ -409,7 +435,7 @@ function FormQR() {
         </h3>
         {qrUrl ? (
           <>
-            <div className={styles.qrPanelCodigo}>
+            <div id="qr-crear-codigo" className={styles.qrPanelCodigo}>
               <QRCodeSVG value={qrUrl} size={200} level="Q" />
             </div>
             <p className={styles.qrPanelOk}>
@@ -422,6 +448,13 @@ function FormQR() {
               onClick={() => navigator.clipboard.writeText(qrUrl).then(() => alert('¡Enlace copiado!'))}
             >
               <ion-icon name="copy-outline" /> Copiar enlace
+            </button>
+            <button
+              type="button"
+              className={styles.qrPanelBtnDescargar}
+              onClick={() => descargarQR('qr-crear-codigo', `pedimento-qr-${patente}-${documento}`)}
+            >
+              <ion-icon name="download-outline" /> Descargar QR
             </button>
           </>
         ) : (
