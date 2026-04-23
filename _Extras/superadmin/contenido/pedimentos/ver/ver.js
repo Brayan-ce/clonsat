@@ -185,12 +185,19 @@ export default function Ver({ id, pedimento: p }) {
     );
   }
 
-  const tipo        = p.vin ? 'vin' : p.contenedor ? 'contenedor' : 'pedimento';
+  const tipo = p.tipo_registro || (p.vin ? 'vin' : p.contenedor ? 'contenedor' : 'pedimento');
   const estadoConf  = ESTADOS[p.estado] ?? { bg: '#f5f5f5', border: '#ccc', color: '#666', icono: 'ellipse' };
 
-  const tipoTxt = { vin: 'Por VIN', contenedor: 'Por Contenedor', pedimento: 'Pedimento' }[tipo];
-  const tipoIcono = { vin: 'car', contenedor: 'cube', pedimento: 'document-text' }[tipo];
-  const tipoColor = { vin: '#2c5fc4', contenedor: '#b45309', pedimento: '#285c4d' }[tipo];
+  const tipoTxt = { vin: 'Por VIN', contenedor: 'Por Contenedor', qr: 'Pedimento con QR', pedimento: 'Pedimento' }[tipo];
+  const tipoIcono = { vin: 'car', contenedor: 'cube', qr: 'qr-code', pedimento: 'document-text' }[tipo];
+  const tipoColor = { vin: '#2c5fc4', contenedor: '#b45309', qr: '#6d28d9', pedimento: '#285c4d' }[tipo];
+  const etiquetaRegistro = tipo === 'contenedor'
+    ? 'registro por contenedor'
+    : tipo === 'vin'
+      ? 'registro por VIN'
+      : tipo === 'qr'
+        ? 'pedimento con QR'
+      : 'pedimento';
 
   const qrUrl = typeof window !== 'undefined'
     ? `${window.location.origin}/SOIANET/oia_consultarapd_cep.aspx?pa=${p.patente}&dn=${p.documento}&s=0&ap=${p.anio}&pad=${p.aduana}&ad=${encodeURIComponent(p.aduana_label ?? '')}&z=QR`
@@ -211,7 +218,7 @@ export default function Ver({ id, pedimento: p }) {
       <div className={styles.encabezado}>
         <div className={styles.encabezadoIzq}>
           <div className={styles.encabezadoTitulos}>
-            <h1 className={styles.titulo}>Pedimento #{p.id}</h1>
+            <h1 className={styles.titulo}>Detalle del {etiquetaRegistro} #{p.id}</h1>
             <div className={styles.badges}>
               {/* Estado */}
               <span className={styles.badge} style={{ background: estadoConf.bg, borderColor: estadoConf.border, color: estadoConf.color }}>
@@ -220,17 +227,18 @@ export default function Ver({ id, pedimento: p }) {
               {/* Tipo */}
               <span className={styles.badge} style={{ background: '#f0f0f0', borderColor: tipoColor, color: tipoColor }}>
                 <ion-icon name={`${tipoIcono}-outline`} /> {tipoTxt}
+                {tipo === 'qr' ? ' — Tiempo real' : ''}
               </span>
             </div>
           </div>
           <Link href="/superadmin/pedimentos" className={styles.linkVolver}>
-            <ion-icon name="arrow-back-outline" /> Volver a la lista de pedimentos
+            <ion-icon name="arrow-back-outline" /> Volver a la lista
           </Link>
         </div>
 
         <div className={styles.btnAcciones}>
           <Link href={`/superadmin/pedimentos/${p.id}/editar`} className={styles.btnEditar}>
-            <ion-icon name="create-outline" /> Editar pedimento
+            <ion-icon name="create-outline" /> Editar {etiquetaRegistro}
           </Link>
           <form
             action={eliminarPedimento.bind(null, p.id)}
@@ -266,12 +274,15 @@ export default function Ver({ id, pedimento: p }) {
         {/* ── Datos generales ── */}
         {tab === 'datos' && (
           <div>
-            <h2 className={styles.seccionTitulo}><ion-icon name="document-text-outline" />Datos del Pedimento</h2>
+            <h2 className={styles.seccionTitulo}>
+              <ion-icon name="document-text-outline" />
+              {tipo === 'contenedor' ? 'Datos de Referencia del Contenedor' : 'Datos del Pedimento'}
+            </h2>
             <div className={styles.camposGrid}>
               <Campo label="Aduana"             valor={p.aduana_label} />
               <Campo label="Año"                valor={p.anio} />
               <Campo label="Estado"             valor={p.estado} />
-              <Campo label="Fecha"              valor={p.fecha} />
+              <Campo label={tipo === 'contenedor' ? 'Fecha de Registro' : 'Fecha'} valor={p.fecha} />
               <Campo label="Tipo de Operación"  valor={p.tipo_operacion} />
               <Campo label="Clave de Documento" valor={p.clave_documento} />
               {tipo !== 'vin' && <Campo label="Patente"   valor={p.patente} />}
@@ -288,7 +299,7 @@ export default function Ver({ id, pedimento: p }) {
         {/* ── Pago ── */}
         {tab === 'pago' && (
           <div>
-            <h2 className={styles.seccionTitulo}><ion-icon name="card-outline" />Información del Pago</h2>
+            <h2 className={styles.seccionTitulo}><ion-icon name="card-outline" />{tipo === 'contenedor' ? 'Pago Relacionado' : 'Información del Pago'}</h2>
             <div className={styles.camposGrid}>
               <Campo label="Banco"                  valor={p.det_banco} />
               <Campo label="Número de Operación"    valor={p.det_num_op} />

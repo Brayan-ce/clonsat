@@ -7,9 +7,11 @@ import { revalidatePath } from 'next/cache';
 /** Devuelve la lista completa de pedimentos */
 export async function obtenerPedimentos() {
   const [rows] = await pool.query(
-    `SELECT id, aduana, aduana_label, anio, patente, documento,
-            estado, fecha, tipo_operacion, clave_documento, vin, contenedor
-     FROM pedimentos
+    `SELECT p.id, p.aduana, p.aduana_label, p.anio, p.patente, p.documento,
+            p.estado, p.fecha, p.tipo_operacion, p.clave_documento, p.vin, p.contenedor,
+            p.tipo_registro,
+            (p.tipo_registro = 'qr') AS es_qr
+     FROM pedimentos p
      ORDER BY id DESC`
   );
   return rows;

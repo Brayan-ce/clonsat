@@ -27,6 +27,10 @@ function buildQrUrl(p) {
 
 /* ── Tipo de pedimento según sus campos ── */
 function getTipo(p) {
+  if (p.tipo_registro === 'qr') return { key: 'qr', icono: 'qr-code', etiqueta: 'Pedimento con QR', color: '#6d28d9' };
+  if (p.tipo_registro === 'vin') return { key: 'vin', icono: 'car', etiqueta: 'Por VIN', color: '#3b73d4' };
+  if (p.tipo_registro === 'contenedor') return { key: 'contenedor', icono: 'cube', etiqueta: 'Por Contenedor', color: '#d97706' };
+  if (p.tipo_registro === 'pedimento') return { key: 'pedimento', icono: 'document-text', etiqueta: 'Pedimento', color: '#285c4d' };
   if (p.vin)        return { key: 'vin',        icono: 'car',           etiqueta: 'Por VIN',        color: '#3b73d4' };
   if (p.contenedor) return { key: 'contenedor', icono: 'cube',          etiqueta: 'Por Contenedor', color: '#d97706' };
   return              { key: 'pedimento',  icono: 'document-text', etiqueta: 'Pedimento',     color: '#285c4d' };
@@ -39,12 +43,14 @@ export default function Pedimentos({ lista = [] }) {
   const [qrAbierto,    setQrAbierto]    = useState(null);
 
   /* ── Contadores para las pestañas de tipo ── */
-  const contadores = useMemo(() => ({
-    todo:       lista.length,
-    pedimento:  lista.filter((p) => !p.vin && !p.contenedor).length,
-    vin:        lista.filter((p) => !!p.vin).length,
-    contenedor: lista.filter((p) => !!p.contenedor && !p.vin).length,
-  }), [lista]);
+  const contadores = useMemo(() => {
+    const base = { todo: lista.length, pedimento: 0, vin: 0, contenedor: 0, qr: 0 };
+    for (const p of lista) {
+      const tipo = getTipo(p).key;
+      if (tipo in base) base[tipo] += 1;
+    }
+    return base;
+  }, [lista]);
 
   /* ── Lista filtrada ── */
   const resultado = useMemo(() => {
@@ -91,6 +97,7 @@ export default function Pedimentos({ lista = [] }) {
           { key: 'pedimento',  icono: 'document-text-outline', etiqueta: 'Pedimento',    count: contadores.pedimento },
           { key: 'vin',        icono: 'car-outline',           etiqueta: 'Por VIN',      count: contadores.vin },
           { key: 'contenedor', icono: 'cube-outline',          etiqueta: 'Contenedor',   count: contadores.contenedor },
+          { key: 'qr',         icono: 'qr-code-outline',       etiqueta: 'Pedimento QR', count: contadores.qr },
         ].map(({ key, icono, etiqueta, count }) => (
           <button
             key={key}
@@ -234,15 +241,17 @@ export default function Pedimentos({ lista = [] }) {
                         Eliminar
                       </button>
                     </form>
-                    <button
-                      type="button"
-                      className={styles.btnAccionQr}
-                      onClick={() => setQrAbierto(p)}
-                      title="Ver código QR"
-                    >
-                      <ion-icon name="qr-code-outline" />
-                      QR
-                    </button>
+                    {getTipo(p).key === 'qr' && (
+                      <button
+                        type="button"
+                        className={styles.btnAccionQr}
+                        onClick={() => setQrAbierto(p)}
+                        title="Ver código QR"
+                      >
+                        <ion-icon name="qr-code-outline" />
+                        QR
+                      </button>
+                    )}
                   </div>
 
                 </div>

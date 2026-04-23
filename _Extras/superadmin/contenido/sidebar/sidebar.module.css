@@ -1,6 +1,8 @@
 .sidebar {
   width: 220px;
-  min-height: 100vh;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background: #285c4d;
   display: flex;
   flex-direction: column;
@@ -9,6 +11,9 @@
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #fff;
   font-size: 14px;
   font-weight: bold;
@@ -17,6 +22,12 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.brandIcon {
+  font-size: 20px;
+  flex-shrink: 0;
 }
 
 .nav {
@@ -24,9 +35,11 @@
   display: flex;
   flex-direction: column;
   padding: 12px 0;
+  overflow-y: auto;
 }
 
 .bottom {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   padding: 0 0 4px;
@@ -34,7 +47,9 @@
 }
 
 .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: rgba(255, 255, 255, 0.8);
   font-family: Arial, sans-serif;
   font-size: 14px;
@@ -56,7 +71,15 @@
   padding-left: 17px;
 }
 
+.icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
 .btnSalir {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 4px 16px 20px;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -65,11 +88,157 @@
   font-size: 13px;
   font-weight: bold;
   font-family: Arial, sans-serif;
-  padding: 9px 0;
+  padding: 9px 14px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btnSalir:hover {
   background: rgba(255, 255, 255, 0.24);
+}
+
+.mobileBar {
+  display: none;
+}
+
+.overlay {
+  display: none;
+}
+
+.drawer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mobileBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: #285c4d;
+    padding: 0 16px;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .mobileBrand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .hamburger {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+
+  .hamburger:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 300;
+  }
+
+  .drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: #285c4d;
+    z-index: 400;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .drawerOpen {
+    transform: translateX(0);
+  }
+
+  .drawerHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    padding: 20px 20px 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+  }
+
+  .drawerNav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    overflow-y: auto;
+  }
+
+  .drawerBottom {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .drawerLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 13px 20px;
+    transition: background 0.15s;
+  }
+
+  .drawerLink:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .drawerActive {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-weight: bold;
+    border-left: 3px solid #fff;
+    padding-left: 17px;
+  }
 }
